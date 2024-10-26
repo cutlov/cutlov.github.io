@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="指针 指向变量 1 2 3 4 5 6 int y=5; //假设y的地址为123 int z; int *p; //变量p是int的地址 p=&amp;y; //将y的地址（123）赋予p z=*p; //将p地址的值（5）交给z *p=*p+1; //y的值会变成6 同理double,char,struct等可以进行类似的操作\n请注意int *p;*p=5;错误，因为不知道5是哪个地址\n">
 <title>指针</title>
 
-<link rel='canonical' href='http://localhost:1313/p/%E6%8C%87%E9%92%88/'>
+<link rel='canonical' href='https://localhost:1313/p/%E6%8C%87%E9%92%88/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="指针">
 <meta property='og:description' content="指针 指向变量 1 2 3 4 5 6 int y=5; //假设y的地址为123 int z; int *p; //变量p是int的地址 p=&amp;y; //将y的地址（123）赋予p z=*p; //将p地址的值（5）交给z *p=*p+1; //y的值会变成6 同理double,char,struct等可以进行类似的操作\n请注意int *p;*p=5;错误，因为不知道5是哪个地址\n">
-<meta property='og:url' content='http://localhost:1313/p/%E6%8C%87%E9%92%88/'>
+<meta property='og:url' content='https://localhost:1313/p/%E6%8C%87%E9%92%88/'>
 <meta property='og:site_name' content='cutlov'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-10-26T16:34:06&#43;08:00'/><meta property='article:modified_time' content='2024-10-26T16:34:06&#43;08:00'/>
 <meta name="twitter:title" content="指针">
@@ -526,6 +526,29 @@
 </span></span><span class="line"><span class="cl"><span class="mi">60</span> <span class="mi">20</span> <span class="mi">80</span>
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h1 id="申请空间">申请空间
+</h1><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">ptr</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="nf">malloc</span><span class="p">(</span><span class="nf">sizof</span><span class="p">(</span><span class="kt">int</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//释放空间否则会内存泄露，当然释放过后就不要重复释放了
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span><span class="o">*</span><span class="n">ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">ip</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="nf">malloc</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="nf">sizof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">ip</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="nf">realloc</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="nf">sizof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">ip</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="nf">realloc</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="c1">//相当于free(ip)
+</span></span></span></code></pre></td></tr></table>
+</div>
 </div>
 </section>
 
@@ -646,7 +669,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.35282a6041d75b99d1c1c924d3845c44c5a70db93cbd2b73367096d7513cbe8c.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
