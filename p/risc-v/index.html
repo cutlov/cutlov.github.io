@@ -523,13 +523,23 @@
 </table></div>
 <h2 id="调用函数">调用函数
 </h2><ol>
-<li>将参数放入函数能拿到的地方</li>
-<li>控制权交给函数（jal，保存返回地址，并跳转函数位置）</li>
-<li>函数获取他想要的参数</li>
-<li>执行函数</li>
-<li>将返回值放在需要原函数拿的到的地方，恢复函数调用前参数的值</li>
-<li>返回并交还控制权（ret）</li>
-</ol>
+<li>
+<p>将参数放入函数能拿到的地方</p>
+</li>
+<li>
+<p>控制权交给函数（jal，保存返回地址，并跳转函数位置）</p>
+</li>
+<li>
+<p>函数获取他想要的参数</p>
+</li>
+<li>
+<p>执行函数</p>
+</li>
+<li>
+<p>将返回值放在需要原函数拿的到的地方，恢复函数调用前参数的值</p>
+</li>
+<li>
+<p>返回并交还控制权（ret）</p>
 <h2 id="栈">栈
 </h2><p>RISC-V的栈区是sp</p>
 <div class="highlight"><div class="chroma">
@@ -548,16 +558,16 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Leaf: addi sp,sp,-8
-</span></span><span class="line"><span class="cl">    sw s1,4(sp)
-</span></span><span class="line"><span class="cl">    sw s0,0(sp)
-</span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    add s0,a0,a1
-</span></span><span class="line"><span class="cl">    add s1,a2,a3
-</span></span><span class="line"><span class="cl">    aub a0,s0,s1
-</span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    lw s0,0(sp)
-</span></span><span class="line"><span class="cl">    lw s1,4(sp)
-</span></span><span class="line"><span class="cl">    jr ra   #ret
+</span></span><span class="line"><span class="cl"> sw s1,4(sp)
+</span></span><span class="line"><span class="cl"> sw s0,0(sp)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> add s0,a0,a1
+</span></span><span class="line"><span class="cl"> add s1,a2,a3
+</span></span><span class="line"><span class="cl"> aub a0,s0,s1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> lw s0,0(sp)
+</span></span><span class="line"><span class="cl"> lw s1,4(sp)
+</span></span><span class="line"><span class="cl"> jr ra   #ret
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img src="/Screenshot%202024-10-27%20165544.png"
@@ -581,9 +591,9 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">Lead</span><span class="p">(</span><span class="kt">int</span> <span class="n">g</span><span class="p">,</span><span class="kt">int</span> <span class="n">h</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="kt">int</span> <span class="n">j</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">f</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">=</span><span class="p">(</span><span class="n">g</span><span class="o">+</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">int</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="n">f</span><span class="o">=</span><span class="p">(</span><span class="n">g</span><span class="o">+</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="k">return</span> <span class="n">f</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -614,6 +624,8 @@ opcode，funct7+funct3:告知要用什么操作<br>
 rs1:source register<br>
 rs2:second register<br>
 rd:destination register</p>
+</li>
+</ol>
 <p>立即数格式
 <img src="/Screenshot%202024-10-27%20172529.png"
 	
