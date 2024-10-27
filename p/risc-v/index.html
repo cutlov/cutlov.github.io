@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="RISC-V 加减运算 1 2 3 4 add x1,x2,x3 #等同于a=b+c，a=x1，b=x2，c=x3 sub x1,x2,x3 #等同于a=b-c，a=x1，b=x2，c=x3 若表示a=b+c+d-e;\n可以表示为\n1 2 3 add x10,x1,x2 add x10,x10,x3 sub x10,x10,x4 若表示f=(g+h)-(i+j);\n可以表示为\n1 2 3 add x5,x20,x21 add x6,x22,x23 sub x19,x5,x6 f=g+10立即数addi x3,x4,10 #addi 用于立即数\n没有减的立即数，因为把10改成-10就可以代表减号了 x0表示硬件级别的0，不可改变\n">
+<title>RISC V</title>
+
+<link rel='canonical' href='https://localhost:1313/p/risc-v/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="RISC V">
+<meta property='og:description' content="RISC-V 加减运算 1 2 3 4 add x1,x2,x3 #等同于a=b+c，a=x1，b=x2，c=x3 sub x1,x2,x3 #等同于a=b-c，a=x1，b=x2，c=x3 若表示a=b+c+d-e;\n可以表示为\n1 2 3 add x10,x1,x2 add x10,x10,x3 sub x10,x10,x4 若表示f=(g+h)-(i+j);\n可以表示为\n1 2 3 add x5,x20,x21 add x6,x22,x23 sub x19,x5,x6 f=g+10立即数addi x3,x4,10 #addi 用于立即数\n没有减的立即数，因为把10改成-10就可以代表减号了 x0表示硬件级别的0，不可改变\n">
+<meta property='og:url' content='https://localhost:1313/p/risc-v/'>
+<meta property='og:site_name' content='cutlov'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-10-27T15:05:49&#43;08:00'/><meta property='article:modified_time' content='2024-10-27T15:05:49&#43;08:00'/>
+<meta name="twitter:title" content="RISC V">
+<meta name="twitter:description" content="RISC-V 加减运算 1 2 3 4 add x1,x2,x3 #等同于a=b+c，a=x1，b=x2，c=x3 sub x1,x2,x3 #等同于a=b-c，a=x1，b=x2，c=x3 若表示a=b+c+d-e;\n可以表示为\n1 2 3 add x10,x1,x2 add x10,x10,x3 sub x10,x10,x4 若表示f=(g+h)-(i+j);\n可以表示为\n1 2 3 add x5,x20,x21 add x6,x22,x23 sub x19,x5,x6 f=g+10立即数addi x3,x4,10 #addi 用于立即数\n没有减的立即数，因为把10改成-10就可以代表减号了 x0表示硬件级别的0，不可改变\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu15373945371835972074.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">👾</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">cutlov</a></h1>
+            <h2 class="site-description">演示说明</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/cutlov'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#加减运算">加减运算</a></li>
+    <li><a href="#内存数据加载到内存">内存数据加载到内存</a>
+      <ol>
+        <li><a href="#以字为单位">以字为单位</a></li>
+        <li><a href="#以byte为单位">以byte为单位</a></li>
+      </ol>
+    </li>
+    <li><a href="#分支指令">分支指令</a></li>
+    <li><a href="#逻辑指令">逻辑指令</a></li>
+    <li><a href="#调用函数">调用函数</a></li>
+    <li><a href="#栈">栈</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#拓展">拓展</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/risc-v/">RISC V</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-10-27</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="risc-v">RISC-V
+</h1><h2 id="加减运算">加减运算
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">add x1,x2,x3
+</span></span><span class="line"><span class="cl">#等同于a=b+c，a=x1，b=x2，c=x3
+</span></span><span class="line"><span class="cl">sub x1,x2,x3
+</span></span><span class="line"><span class="cl">#等同于a=b-c，a=x1，b=x2，c=x3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若表示a=b+c+d-e;<br>
+可以表示为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">add x10,x1,x2
+</span></span><span class="line"><span class="cl">add x10,x10,x3
+</span></span><span class="line"><span class="cl">sub x10,x10,x4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若表示f=(g+h)-(i+j);<br>
+可以表示为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">add x5,x20,x21
+</span></span><span class="line"><span class="cl">add x6,x22,x23
+</span></span><span class="line"><span class="cl">sub x19,x5,x6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>f=g+10立即数<code>addi x3,x4,10 #addi 用于立即数</code><br>
+没有减的立即数，因为把10改成-10就可以代表减号了
+<code>x0</code>表示硬件级别的0，不可改变</p>
+<h2 id="内存数据加载到内存">内存数据加载到内存
+</h2><h3 id="以字为单位">以字为单位
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lw x10,12(x15)    #Reg x10 gets A[3]
+</span></span><span class="line"><span class="cl">add x11,x12,x10   #g=h+A
+</span></span><span class="line"><span class="cl">sw x10,40(x15)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>x15是基地址寄存器指向A的地址，12表示偏移字节，3个int有12个字节
+上述代码表示为c为</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">g</span><span class="o">=</span><span class="n">h</span><span class="o">+</span><span class="n">A</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">A</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="n">h</span><span class="o">+</span><span class="n">A</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="以byte为单位">以byte为单位
+</h3><p>有<code>lb</code>和<code>sb</code><br>
+例如&rsquo;lb x10,3(x11)'</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lw x10,12(x15)    #value in A[3]
+</span></span><span class="line"><span class="cl">add x12,x12,x10
+</span></span><span class="line"><span class="cl">##可以用上面两条指令替代下面的
+</span></span><span class="line"><span class="cl">addi x12,value   #value in A[3]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="分支指令">分支指令
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">beq reg1,reg2,L1
+</span></span><span class="line"><span class="cl">#比较reg1，和reg2，如果相等跳转到L1，不相等执行下一条指令
+</span></span><span class="line"><span class="cl">j label
+</span></span><span class="line"><span class="cl">#无条件跳转label
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bne x13,x14,Else   #if(i==j)
+</span></span><span class="line"><span class="cl">add x10,x11,x12    #  f=g+h;
+</span></span><span class="line"><span class="cl">j Exit             #  else;
+</span></span><span class="line"><span class="cl">Else:sub x10,x11,x12  # f=g-h;
+</span></span><span class="line"><span class="cl">Exit:
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们有<code>blt</code>（小于）,<code>bltu</code>（unsigned，小于）,<code>bge</code>（大于等于）,<code>bgeu</code>（unsigned 大于等于）<br>
+但是没有<code>bgt</code>和<code>ble</code>因为可以调换所以不需要这两个指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>              <span class="c1">//add x9,x8,x0   #x9=&amp;A[0]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">sum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>              <span class="c1">//add x10,x0,x0  #sum
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">20</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>  <span class="c1">//add x11,x0,x0  #i
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sum</span><span class="o">+=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>          <span class="c1">//add x13,x0,20  #x13 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                        <span class="c1">//Loop:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                          <span class="n">bge</span> <span class="n">x11</span><span class="p">,</span><span class="n">x13</span><span class="p">,</span><span class="n">Done</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">lw</span>  <span class="n">x12</span><span class="p">,</span><span class="mi">0</span><span class="p">(</span><span class="n">x9</span><span class="p">)</span>   <span class="err">#</span><span class="n">x12</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">add</span> <span class="n">x10</span><span class="p">,</span><span class="n">x10</span><span class="p">,</span><span class="n">x12</span> <span class="err">#</span><span class="n">sum</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">addi</span> <span class="n">x9</span><span class="p">,</span><span class="n">x9</span><span class="p">,</span><span class="mi">4</span>    <span class="err">#</span><span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">addi</span> <span class="n">x11</span><span class="p">,</span><span class="n">x11</span><span class="p">,</span><span class="mi">1</span>  <span class="err">#</span><span class="n">i</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">j</span> <span class="n">loop</span>
+</span></span><span class="line"><span class="cl">                          <span class="nl">Done</span><span class="p">:</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="逻辑指令">逻辑指令
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>c operators</th>
+          <th>RISC-v</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>&amp;</td>
+          <td>and</td>
+      </tr>
+      <tr>
+          <td>|</td>
+          <td>or</td>
+      </tr>
+      <tr>
+          <td>^</td>
+          <td>xor</td>
+      </tr>
+      <tr>
+          <td>&laquo;</td>
+          <td>sll</td>
+      </tr>
+      <tr>
+          <td>&gt;&gt;</td>
+          <td>srl</td>
+      </tr>
+      <tr>
+          <td>slli是立即数操作</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>&lsquo;slli x11,x12,2   #x11=x12&laquo;2&rsquo;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>那么如何乘12呢？</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>可以先乘4在加上原来数字乘8，最后相加这两个数字</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>srai</code>右移立即数<code>srai x10,x10,4</code></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="调用函数">调用函数
+</h2><ol>
+<li>将参数放入函数能拿到的地方</li>
+<li>控制权交给函数（jal，保存返回地址，并跳转函数位置）</li>
+<li>函数获取他想要的参数</li>
+<li>执行函数</li>
+<li>将返回值放在需要原函数拿的到的地方，恢复函数调用前参数的值</li>
+<li>返回并交还控制权（ret）</li>
+</ol>
+<h2 id="栈">栈
+</h2><p>RISC-V的栈区是sp</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Leaf: addi sp,sp,-8
+</span></span><span class="line"><span class="cl">    sw s1,4(sp)
+</span></span><span class="line"><span class="cl">    sw s0,0(sp)
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    add s0,a0,a1
+</span></span><span class="line"><span class="cl">    add s1,a2,a3
+</span></span><span class="line"><span class="cl">    aub a0,s0,s1
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    lw s0,0(sp)
+</span></span><span class="line"><span class="cl">    lw s1,4(sp)
+</span></span><span class="line"><span class="cl">    jr ra   #ret
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/Screenshot%202024-10-27%20165544.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示意图"
+	
+	
+><br>
+等同于</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">Lead</span><span class="p">(</span><span class="kt">int</span> <span class="n">g</span><span class="p">,</span><span class="kt">int</span> <span class="n">h</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="kt">int</span> <span class="n">j</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">=</span><span class="p">(</span><span class="n">g</span><span class="o">+</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结
+</h2><p><img src="/Screenshot%202024-10-27%20171048.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="总结"
+	
+	
+></p>
+<h2 id="拓展">拓展
+</h2><p>汇编语言的32位机器代码格式<br>
+<img src="/Screenshot%202024-10-27%20171839.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="format"
+	
+	
+><br>
+opcode，funct7+funct3:告知要用什么操作<br>
+rs1:source register<br>
+rs2:second register<br>
+rd:destination register</p>
+<p>立即数格式
+<img src="/Screenshot%202024-10-27%20172529.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="immediate"
+	
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 cutlov
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
