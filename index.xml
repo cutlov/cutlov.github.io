@@ -7,7 +7,71 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>cutlov</copyright>
-        <lastBuildDate>Sun, 27 Oct 2024 15:05:49 +0800</lastBuildDate><atom:link href="https://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 01 Nov 2024 19:17:03 +0800</lastBuildDate><atom:link href="https://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>DeepLearning_1</title>
+        <link>https://localhost:1313/p/deeplearning_1/</link>
+        <pubDate>Fri, 01 Nov 2024 19:17:03 +0800</pubDate>
+        
+        <guid>https://localhost:1313/p/deeplearning_1/</guid>
+        <description>&lt;h1 id=&#34;deeplearning&#34;&gt;DeepLearning
+&lt;/h1&gt;&lt;h2 id=&#34;proceduere&#34;&gt;Proceduere
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://localhost:1313/Screenshot%202024-11-01%20201721.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;procedure&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;guide&#34;&gt;Guide
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://localhost:1313/Screenshot%202024-11-01%20201852.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;guide&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;training-data-loss-large&#34;&gt;Training data loss large
+&lt;/h3&gt;&lt;h4 id=&#34;model-bias&#34;&gt;Model bias
+&lt;/h4&gt;&lt;p&gt;Bias too small which make the smallest loss not contain there.&lt;/p&gt;
+&lt;p&gt;Solution: redesign you model to make it flexible&lt;br&gt;
+such as more feature&lt;/p&gt;
+&lt;h4 id=&#34;optimization-issue&#34;&gt;Optimization issue
+&lt;/h4&gt;&lt;p&gt;This method can&amp;rsquo;t find the smallest loss&lt;/p&gt;
+&lt;h4 id=&#34;conclusion&#34;&gt;conclusion
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Compare different model to find this model efficiently.&lt;/li&gt;
+&lt;li&gt;Start from shallower networks(or other model),which are easier to optimize&lt;/li&gt;
+&lt;li&gt;If deeper networks don&amp;rsquo;t obtain smaller loss on training data, then there is optimization issue.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;testing-data-loss-largeoverfitting&#34;&gt;testing data loss large(overfitting)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Less parameter&lt;/li&gt;
+&lt;li&gt;Less features&lt;/li&gt;
+&lt;li&gt;Early stopping&lt;/li&gt;
+&lt;li&gt;Regularization&lt;/li&gt;
+&lt;li&gt;Dropout&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;testing-setprivate-large&#34;&gt;Testing set(private) large
+&lt;/h3&gt;&lt;h4 id=&#34;n-fold-cross-validation&#34;&gt;N-fold cross Validation
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://localhost:1313/Screenshot%202024-11-01%20203828.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;n-fold&#34;
+	
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>RISC V</title>
         <link>https://localhost:1313/p/risc-v/</link>
         <pubDate>Sun, 27 Oct 2024 15:05:49 +0800</pubDate>
