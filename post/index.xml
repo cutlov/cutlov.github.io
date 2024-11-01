@@ -201,7 +201,7 @@
 &lt;/table&gt;
 &lt;hr&gt;
 &lt;p&gt;slli是立即数操作                &lt;br&gt;
-&amp;lsquo;slli x11,x12,2   #x11=x12&amp;laquo;2&amp;rsquo;
+&lt;code&gt;slli x11,x12,2   #x11=x12&amp;lt;&amp;lt;2&lt;/code&gt;
 那么如何乘12呢？                  &lt;br&gt;
 可以先乘4在加上原来数字乘8，最后相加这两个数字&lt;br&gt;
 &lt;code&gt;srai&lt;/code&gt;右移立即数&lt;code&gt;srai x10,x10,4&lt;/code&gt;&lt;/p&gt;
